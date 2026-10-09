@@ -1,0 +1,29 @@
+
+AWSTemplateFormatVersion: '2010-09-09'
+Description: Test and Production stack pipeline experiment
+
+Parameters:
+  Environment:
+    Type: String
+    AllowedValues:
+      - test
+      - production
+    Description: Deployment environment
+
+Resources:
+  ApplicationBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: !Sub 'cf-${Environment}-${AWS::AccountId}-${AWS::Region}'
+      VersioningConfiguration:
+        Status: Enabled
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: true
+        BlockPublicPolicy: true
+        IgnorePublicAcls: true
+        RestrictPublicBuckets: true
+
+Outputs:
+  BucketName:
+    Description: Name of the application bucket
+    Value: !Ref ApplicationBucket
